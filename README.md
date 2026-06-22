@@ -2,7 +2,7 @@
 
 Local FastAPI app for turning receipt/invoice photos into reviewed, itemized bookkeeping data. The app keeps extraction local, uses Ollama vision models for structured extraction, stores review state in SQLite, and exports QuickBooks-shaped files.
 
-See [specification.md](/Users/emmettmoore/projects/tmp/specification.md) for the full product and extraction specification, including benchmark schemas.
+See [specification.md](specification.md) for the full product and extraction specification, including benchmark schemas.
 
 ## Current Features
 
@@ -139,7 +139,7 @@ uv run python process_receipts.py test-input/20260528_1207371.jpg
 
 ## Output Schema
 
-The primary extracted receipt JSON schema is documented in [specification.md](/Users/emmettmoore/projects/tmp/specification.md#receipt-json-output-schema).
+The primary extracted receipt JSON schema is documented in [specification.md](specification.md#receipt-json-output-schema).
 
 High-level shape:
 
@@ -193,7 +193,7 @@ High-level shape:
 }
 ```
 
-The preliminary image-layout schema is documented in [specification.md](/Users/emmettmoore/projects/tmp/specification.md#preliminary-image-layout-schema). Use it when benchmarking model ability to locate receipt outline, vendor/header, transaction fields, itemized list, and totals before extraction.
+The preliminary image-layout schema is documented in [specification.md](specification.md#preliminary-image-layout-schema). Use it when benchmarking model ability to locate receipt outline, vendor/header, transaction fields, itemized list, and totals before extraction.
 
 ## Data Storage
 
