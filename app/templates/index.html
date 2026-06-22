@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <div>
+    <h1>Receipt Workbench</h1>
+    <p>Preview receipts, run local extraction, then review the structured result.</p>
+  </div>
+</section>
+
+<section class="upload-panel">
+  <div>
+    <h2>Upload</h2>
+    <p>Add a receipt image from this machine.</p>
+  </div>
+  <div>
+    <form class="upload-form" method="post" action="/upload" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".jpg,.jpeg,.png,.heic" required>
+      <button type="submit">Upload receipt</button>
+    </form>
+  </div>
+</section>
+
+<section class="grid two">
+  <div>
+    <div class="section-title">
+      <h2>Test Images</h2>
+      <span class="count">{{ test_images | length }} files</span>
+    </div>
+    <div class="document-list">
+      {% for image in test_images %}
+      <a class="document-row" href="/test-input/{{ image.name }}/preview">
+        <span class="thumb">
+          <img src="/test-input/{{ image.name }}/image" alt="">
+        </span>
+        <span class="document-main">
+          <strong>{{ image.name }}</strong>
+          <small>Open image before processing</small>
+        </span>
+        <span class="text-action">Open</span>
+      </a>
+      {% else %}
+      <p>No test images found under <code>test-input/</code>.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">
+      <h2>Receipts</h2>
+      {% if show_all %}
+      <a href="/">Show latest only</a>
+      {% else %}
+      <a href="/?show=all">Show all versions</a>
+      {% endif %}
+    </div>
+    <div class="document-list">
+      {% for receipt in receipts %}
+      <a class="document-row" href="/receipts/{{ receipt.id }}">
+        <span class="receipt-id">#{{ receipt.id }}</span>
+        <span class="document-main">
+          <strong>#{{ receipt.id }}</strong>
+          {{ receipt.extracted_json.vendor.name or receipt.original_filename }}
+          {% if version_counts.get(receipt.source_hash, 1) > 1 and not show_all %}
+          <small>{{ version_counts.get(receipt.source_hash) }} versions</small>
+          {% endif %}
+        </span>
+        <span class="status">{{ receipt.status.value }}</span>
+      </a>
+      {% else %}
+      <p>No receipts processed yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

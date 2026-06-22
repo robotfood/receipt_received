@@ -1,0 +1,17 @@
+fastapi>=0.111
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+pydantic>=2.7
+jinja2>=3.1
+httpx2>=0.28
+pillow>=10.3
+opencv-python>=4.9
+dateparser>=1.2
+rapidfuzz>=3.9
+
+# Optional OCR/model backends. Install one or more as needed:
+# pyobjc-framework-Vision>=11.0 ; platform_system == "Darwin"
+# pyobjc-framework-Quartz>=11.0 ; platform_system == "Darwin"
+# paddleocr>=2.7
+# pytesseract>=0.3
+# python-doctr[torch]>=0.9

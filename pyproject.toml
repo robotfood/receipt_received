@@ -1,0 +1,25 @@
+[project]
+name = "local-receipt-qbo-import"
+version = "0.1.0"
+description = "Local receipt OCR, review, export, and QuickBooks Online import MVP."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.111",
+  "uvicorn[standard]>=0.30",
+  "python-multipart>=0.0.9",
+  "pydantic>=2.7",
+  "jinja2>=3.1",
+  "httpx2>=0.28",
+  "pillow>=10.3",
+  "opencv-python>=4.9",
+  "dateparser>=1.2",
+  "rapidfuzz>=3.9",
+]
+
+[project.optional-dependencies]
+ocr-apple = ["pyobjc-framework-Vision>=11.0", "pyobjc-framework-Quartz>=11.0"]
+ocr-paddle = ["paddleocr>=2.7"]
+ocr-tesseract = ["pytesseract>=0.3"]
+
+[tool.uv]
+package = false

@@ -1,0 +1,1 @@
+"""Local receipt extraction app."""

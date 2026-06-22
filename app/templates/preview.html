@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="preview-header">
+  <div>
+    <h1>{{ image.name }}</h1>
+    <p>Confirm this is the receipt you want to extract.</p>
+  </div>
+  <div class="actions">
+    <a class="button secondary" href="/">Back</a>
+    <button id="process-button" type="button" data-process-url="/test-input/{{ image.name }}/process">Process</button>
+  </div>
+</section>
+
+<section id="process-status" class="process-status" hidden>
+  <div class="spinner" aria-hidden="true"></div>
+  <div>
+    <strong>Processing receipt</strong>
+    <p>Running staged local extraction. This can take a minute or more.</p>
+  </div>
+</section>
+
+<section class="preview-layout">
+  <div class="preview-pane">
+    <img src="/test-input/{{ image.name }}/image" alt="{{ image.name }}">
+  </div>
+  <aside class="preview-sidebar">
+    <h2>Extraction</h2>
+    <dl>
+      <div>
+        <dt>Source</dt>
+        <dd>{{ image.name }}</dd>
+      </div>
+      <div>
+        <dt>Model</dt>
+        <dd>Local staged VLM</dd>
+      </div>
+      <div>
+        <dt>Review</dt>
+        <dd>Required before export or sync</dd>
+      </div>
+    </dl>
+    <button id="process-button-secondary" class="full-width" type="button" data-process-url="/test-input/{{ image.name }}/process">Process receipt</button>
+  </aside>
+</section>
+
+<script src="/static/preview.js?v=1"></script>
+{% endblock %}
