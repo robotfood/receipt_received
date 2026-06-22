@@ -428,6 +428,8 @@ def _prompt() -> str:
 Look at the receipt or invoice image and extract only receipt information.
 Return only JSON. No markdown. No explanation.
 
+IMPORTANT: Pay close attention to handwritten corrections, annotations, cross-outs, and cancellations (e.g., "Return", "Cancelled", "Cancel"). If a printed total, subtotal, tax, price, or item is crossed out and corrected by hand, extract the hand-corrected value as the active value instead of the crossed-out printed value. If a line item is crossed out or marked as returned/cancelled, do not extract it, or adjust its cost to 0, and add a note to the `warnings` list explaining the return.
+
 Use visible text from the image. Do not invent missing values.
 Do not extract non-Latin/non-English script characters (e.g., ignore Chinese characters). For bilingual or multilingual descriptions, extract only the English or French text and ignore any Asian script.
 Use CAD unless another currency is printed.
@@ -471,6 +473,7 @@ Return exactly this JSON shape:
 def _summary_prompt() -> str:
     return """
 Extract receipt summary fields from the image. Return only JSON.
+IMPORTANT: Pay attention to handwritten corrections or edits. If a printed value (like date, invoice number, or totals) is crossed out and corrected by hand, extract the hand-corrected value.
 Use visible text only. Dates: YYYY-MM-DD. Money: numbers.
 Supplier phone must look like """ + PHONE_PATTERN_HINT + """.
 TPS/TVQ/GST/QST numbers are tax IDs, not phone numbers. Examples: """ + TAX_ID_PATTERN_HINT + """.
@@ -487,6 +490,8 @@ Look at this receipt/invoice line-item crop and extract only visible line items.
 Return only JSON. No markdown. No explanation. Use visible text only.
 Ignore header, totals, payment, tax summary, customer copy, and footer text.
 Do not invent missing items.
+
+IMPORTANT: Look for handwritten cross-outs, cancellations (e.g., "Return", "Cancelled", "Cancel"), or price adjustments on each line item. If a line item is crossed out or marked as returned/cancelled, do not extract it, or adjust its cost to 0, and add a note to the `warnings` list explaining the return.
 
 For each line item, extract item, description, weight, unit, quantity, unit_price,
 cost, tax, tax_code, taxable. If item tax is not printed, use 0.0. Preserve
@@ -505,6 +510,9 @@ def _totals_prompt() -> str:
 Look at this receipt/invoice totals/payment crop and extract only totals, taxes,
 payment, and any tax-code legend.
 Return only JSON. No markdown. No explanation. Use visible text only.
+
+IMPORTANT: Look for handwritten changes or corrections to the subtotal, taxes, and grand total. If a printed total/subtotal is crossed out and a new one is written by hand, extract the hand-corrected value as the active value.
+
 Dates must be YYYY-MM-DD if visible. Money values must be numbers.
 If TPS/TVQ/GST/QST tax IDs are visible, put them in supplier_tax_id, not payment or phone.
 
