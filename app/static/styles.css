@@ -654,6 +654,20 @@ pre {
   margin-bottom: 5px;
 }
 
+.alert-banner {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  border-left: 5px solid #d97706;
+  border-radius: 6px;
+  color: #b45309;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 @media (max-width: 900px) {
   main {
     padding: 14px;

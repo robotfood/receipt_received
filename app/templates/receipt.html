@@ -9,6 +9,30 @@
   </div>
 </div>
 
+{% set is_return = false %}
+{% if 'return' in record.original_filename|lower or 'refund' in record.original_filename|lower %}
+  {% set is_return = true %}
+{% endif %}
+{% if 'return' in receipt.transaction.payment_method|lower or 'refund' in receipt.transaction.payment_method|lower %}
+  {% set is_return = true %}
+{% endif %}
+{% for item in receipt.line_items %}
+  {% if 'return' in item.description|lower or 'cancel' in item.description|lower or 'refund' in item.description|lower or 'return' in item.item|lower or 'cancel' in item.item|lower or 'refund' in item.item|lower %}
+    {% set is_return = true %}
+  {% endif %}
+{% endfor %}
+{% for warning in receipt.confidence.warnings %}
+  {% if 'return' in warning|lower or 'cancel' in warning|lower or 'refund' in warning|lower %}
+    {% set is_return = true %}
+  {% endif %}
+{% endfor %}
+
+{% if is_return %}
+<div class="alert-banner return-notice">
+  <span>⚠️ <strong>Return / Cancellation Detected:</strong> This document appears to contain returns, refunds, or cancellations. Please review the itemized lines and verified totals before exporting.</span>
+</div>
+{% endif %}
+
 <section class="receipt-header">
   <div>
     <h1>Receipt #{{ record.id }}</h1>
