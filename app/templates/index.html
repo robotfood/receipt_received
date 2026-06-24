@@ -7,17 +7,21 @@
   </div>
 </section>
 
-<section class="upload-panel">
-  <div>
-    <h2>Upload</h2>
-    <p>Add a receipt image from this machine.</p>
-  </div>
-  <div>
-    <form class="upload-form" method="post" action="/upload" enctype="multipart/form-data">
-      <input type="file" name="file" accept=".jpg,.jpeg,.png,.heic" required>
-      <button type="submit">Upload receipt</button>
-    </form>
-  </div>
+<section class="upload-panel-v2">
+  <h2>Upload Receipt</h2>
+  <p class="subtitle">Drag and drop your receipt image here, or click to browse</p>
+  
+  <form id="upload-form" class="dropzone" method="post" action="/upload" enctype="multipart/form-data">
+    <div class="dropzone-content">
+      <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+      </svg>
+      <span class="dropzone-text">Choose a file or drag it here</span>
+      <span class="file-info" id="file-info">Supports JPG, JPEG, PNG, HEIC</span>
+    </div>
+    <input type="file" name="file" id="file-input" accept=".jpg,.jpeg,.png,.heic" required>
+    <button type="submit" id="submit-btn" class="button" disabled>Upload and Process</button>
+  </form>
 </section>
 
 <section class="grid two">
@@ -72,4 +76,72 @@
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const dropzone = document.getElementById("upload-form");
+  const fileInput = document.getElementById("file-input");
+  const fileInfo = document.getElementById("file-info");
+  const submitBtn = document.getElementById("submit-btn");
+
+  // Prevent default drag behaviors
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+  });
+
+  // Highlight dropzone when item is dragged over it
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, highlight, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, unhighlight, false);
+  });
+
+  // Handle dropped files
+  dropzone.addEventListener('drop', handleDrop, false);
+
+  // Handle selected files
+  fileInput.addEventListener('change', handleFiles, false);
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function highlight() {
+    dropzone.classList.add('dragover');
+  }
+
+  function unhighlight() {
+    dropzone.classList.remove('dragover');
+  }
+
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+
+    if (files.length) {
+      fileInput.files = files;
+      handleFiles();
+    }
+  }
+
+  function handleFiles() {
+    const file = fileInput.files[0];
+    if (file) {
+      fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      fileInfo.style.color = 'var(--accent-strong)';
+      fileInfo.style.fontWeight = 'bold';
+      submitBtn.disabled = false;
+    } else {
+      fileInfo.textContent = "Supports JPG, JPEG, PNG, HEIC";
+      fileInfo.style.color = 'var(--muted)';
+      fileInfo.style.fontWeight = 'normal';
+      submitBtn.disabled = true;
+    }
+  }
+});
+</script>
 {% endblock %}
