@@ -221,6 +221,8 @@ def _call_ollama_json(
             "temperature": 0,
             "num_ctx": 4096,
             "num_predict": num_predict,
+            "num_gpu": 1,
+            "num_thread": 4,
         },
     }
 

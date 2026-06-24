@@ -59,8 +59,8 @@ def preprocess_image_for_vlm(input_path: Path, receipt_id_hint: str) -> Path:
             if img.mode != "RGB":
                 img = img.convert("RGB")
 
-            # 3. Dynamic resizing (resizing to max 2000px on the longest side to keep legibility)
-            img.thumbnail((2000, 2000))
+            # 3. Dynamic resizing (resizing to max 1280px on the longest side to speed up inference)
+            img.thumbnail((1280, 1280))
 
             # 4. Mild contrast enhancement to assist low-light/faint prints
             img = ImageEnhance.Contrast(img).enhance(1.15)
